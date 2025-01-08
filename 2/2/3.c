@@ -33,10 +33,26 @@ rectangle canonicalize(rectangle r) {
 
 rectangle intersection(rectangle r1, rectangle r2) {
     rectangle r;
-    r.x = max(r1.x, r2.x);
-    r.y = max(r1.y, r2.y);
-    r.width = min(r1.width, r2.width);
-    r.height = min(r1.height, r2.height);
+    int x_left, x_right, y_bottom, y_top;
+
+    r1 = canonicalize(r1);
+    r2 = canonicalize(r2);
+
+    x_left = max(r1.x, r2.x);
+    x_right = min(r1.x + r1.width, r2.x + r2.width);
+    y_bottom = max(r1.y, r2.y);
+    y_top = min(r1.y + r1.height, r2.y + r2.height);
+
+    if (x_right >= x_left && y_top >= y_bottom) {
+        r.x = x_left;
+        r.y = y_bottom;
+        r.width = x_right - x_left;
+        r.height = y_top - y_bottom;
+    } else {
+        r.width = 0;
+        r.height = 0;
+    }
+
     return r;
 }
 
